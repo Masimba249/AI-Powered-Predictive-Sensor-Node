@@ -1,0 +1,78 @@
+[
+  {
+    "id": "mqtt-in-telemetry",
+    "type": "mqtt in",
+    "name": "Telemetry Subscribe",
+    "topic": "predictive-node/telemetry",
+    "broker": "local-broker",
+    "x": 120, "y": 80,
+    "wires": [["json-parse"]]
+  },
+  {
+    "id": "json-parse",
+    "type": "json",
+    "name": "Parse JSON",
+    "x": 300, "y": 80,
+    "wires": [["gauge-temp", "gauge-conf", "status-text", "chart-conf"]]
+  },
+  {
+    "id": "gauge-temp",
+    "type": "ui_gauge",
+    "name": "Temperature",
+    "group": "main-group",
+    "label": "Temperature (°C)",
+    "valueFormat": "{{value}}",
+    "min": 0, "max": 100,
+    "x": 520, "y": 40,
+    "wires": []
+  },
+  {
+    "id": "gauge-conf",
+    "type": "ui_gauge",
+    "name": "Confidence",
+    "group": "main-group",
+    "label": "Model Confidence",
+    "valueFormat": "{{value}}%",
+    "min": 0, "max": 100,
+    "x": 520, "y": 100,
+    "wires": []
+  },
+  {
+    "id": "status-text",
+    "type": "ui_text",
+    "name": "Fault Status",
+    "group": "main-group",
+    "label": "Status",
+    "format": "{{msg.payload.lbl}}",
+    "x": 520, "y": 160,
+    "wires": []
+  },
+  {
+    "id": "chart-conf",
+    "type": "ui_chart",
+    "name": "Confidence History",
+    "group": "main-group",
+    "label": "Confidence Over Time",
+    "chartType": "line",
+    "x": 520, "y": 220,
+    "wires": []
+  },
+  {
+    "id": "mqtt-in-alerts",
+    "type": "mqtt in",
+    "name": "Alert Subscribe",
+    "topic": "predictive-node/alert",
+    "broker": "local-broker",
+    "x": 120, "y": 300,
+    "wires": [["alert-notify"]]
+  },
+  {
+    "id": "alert-notify",
+    "type": "ui_toast",
+    "name": "Anomaly Alert",
+    "displayTime": 5,
+    "position": "top right",
+    "x": 340, "y": 300,
+    "wires": []
+  }
+]
